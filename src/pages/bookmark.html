@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko" scroll="yes">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>관리자 대시보드</title>
+        <!--css 링크 추가하기-->
+        <link rel="stylesheet" href="style_dashboard.css">
+        <link rel="stylesheet" href="common.css">
+        <!--Javascript 라이브러리 추가하기-->
+
+        <script>
+    
+            var currentPage = 1; // 페이지 번호를 저장할 변수
+    
+            // 페이지를 변경하면 해당 페이지의 데이터를 표시하는 함수
+            function changePage(pageNumber) {
+                currentPage = pageNumber;
+                displayData();
+            }
+    
+            // 데이터를 표시하는 함수 (실제로는 서버에서 데이터를 가져와야 함)
+            function displayData() {
+                var tableRows = document.querySelectorAll('.result_table tr');
+                var rowsPerPage = 10;
+    
+                // 모든 행을 숨김
+                for (var i = 1; i < tableRows.length; i++) {
+                    tableRows[i].style.display = 'none';
+                }
+    
+                // 현재 페이지에 해당하는 행만 표시
+                var startIndex = (currentPage - 1) * rowsPerPage + 1;
+                var endIndex = startIndex + rowsPerPage;
+    
+                for (var i = startIndex; i < endIndex && i < tableRows.length; i++) {
+                    tableRows[i].style.display = '';
+                }
+
+                var buttons = document.querySelectorAll('.pagination button');
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].style.backgroundColor = 'white';
+                    buttons[currentPage - 1].style.color = 'black';
+                }
+                buttons[currentPage].style.backgroundColor = 'gray';
+                buttons[currentPage].style.color = 'white';
+            }
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                displayData();
+            });
+        </script>
+
+        <script>
+            function toggleStar(rowNumber) {
+                var starButton = document.getElementById('star-btn-' + rowNumber);
+                starButton.classList.toggle('active');
+            }
+        </script>
+    </head>
+
+    <body class ="mainWrap" scroll="yes">
+        <div class ="wrap">
+            <div class ="header_wrap">
+                <div class = "top">
+                    <a class="join">회원가입</a>
+                    <a class="login">로그인</a>
+                </div>
+                <div class="header">
+                    <div class="logo">
+                        <a href="/main.do">
+                            <img src="images/bike_logo.png" alt="관리자 페이지 로고">
+                        </a>
+                    </div>
+                    <div class = "menu_web">
+                        <ul>
+                            <li>
+                                <a>대여소 조회</a>
+                            </li>
+                            <li>
+                                <a>문의 게시판</a>
+                            </li>
+                            <li>
+                                <a>즐겨찾기</a>
+                            </li>
+                            <li>
+                                <a>따릉이 랭킹</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard_list">
+                <h2>즐겨찾기</h2>
+                <div class="result_table">
+                    <table id="mem_usage">
+                        <tr>
+                            <th>즐겨찾기</th>
+                            <th>번호</th>
+                            <th>명칭</th>
+                            <th>자치구</th>
+                            <th>주소</th>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>1</td>
+                            <td>광진교 남단 사거리(천호공원 방면)</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>2</td>
+                            <td>해공공원(천호동)</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>3</td>
+                            <td>해공도서관앞</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>4</td>
+                            <td>삼성광나루아파트 버스정류장</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>5</td>
+                            <td>롯데캐슬 115동앞</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>6</td>
+                            <td>암사동 선사유적지</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>7</td>
+                            <td>암사역 3번출구(국민은행앞)</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>8</td>
+                            <td>천호역4번출구(현대백화점)</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>9</td>
+                            <td>강동세무서</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>10</td>
+                            <td>LIGA 아파트 앞</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>11</td>
+                            <td>서울 상운차량</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>12</td>
+                            <td>강동구청역 1번 출입구</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>13</td>
+                            <td>샛마을 근린공원</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>14</td>
+                            <td>해뜨는 주유소옆 리엔파크 109동앞</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                        <tr>
+                            <td><button class="star-btn" onclick="toggleStar()"></button></td>
+                            <td>15</td>
+                            <td>둔촌고교입구 교차로(길동주민센터 방면)</td>
+                            <td>강동구</td>
+                            <td>서울특별시 강동구 구천면로 171</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+
+                <div class="pagination">
+                    <button onclick="changePage(currentPage - 1)" disabled="true">이전</button>
+                    <button onclick="changePage(1)">1</button>
+                    <button onclick="changePage(2)">2</button>
+                    <button onclick="changePage(3)">3</button>
+                    <button onclick="changePage(currentPage + 1)">다음</button>
+                </div>
+                <br>
+                
+                <div class="search_container">
+                    <input type="text" placeholder="제목 검색" id="title_search"/>
+                    <button type="button" id="title_search_btn">검색</button>
+                </div>
+                <br>
+            </div>
+        </div>
+    </body>
+</html>

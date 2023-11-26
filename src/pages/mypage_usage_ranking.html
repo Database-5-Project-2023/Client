@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="style_dashboard.css">
+    <link rel="stylesheet" href="common.css">
+    <!-- 추가적으로 필요한 CSS 파일들을 링크해주세요 -->
+
+    <script src="mypage_move_to.js"></script>
+    <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+
+    <script>
+        window.addEventListener('load', function () {
+            var buttons = document.querySelectorAll('.mypage_button button');
+
+            buttons.forEach(function (button) {
+                customizeButtonStyles(button, "usageHistory", "history");
+            });
+        });
+    </script>
+
+    <script>  
+        var currentPage = 1; // 페이지 번호를 저장할 변수
+
+        // 페이지를 변경하면 해당 페이지의 데이터를 표시하는 함수
+        function changePage(pageNumber) {
+            currentPage = pageNumber;
+            displayData();
+        }
+
+        // 데이터를 표시하는 함수 (실제로는 서버에서 데이터를 가져와야 함)
+        function displayData() {
+            var tableRows = document.querySelectorAll('.result_table tr');
+            var rowsPerPage = 10;
+
+            // 모든 행을 숨김
+            for (var i = 1; i < tableRows.length; i++) {
+                tableRows[i].style.display = 'none';
+            }
+
+            // 현재 페이지에 해당하는 행만 표시
+            var startIndex = (currentPage - 1) * rowsPerPage + 1;
+            var endIndex = startIndex + rowsPerPage;
+
+            for (var i = startIndex; i < endIndex && i < tableRows.length; i++) {
+                tableRows[i].style.display = '';
+            }
+
+            var buttons = document.querySelectorAll('.pagination button');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].style.backgroundColor = 'white';
+                buttons[currentPage - 1].style.color = 'black';
+            }
+            buttons[currentPage].style.backgroundColor = 'gray';
+            buttons[currentPage].style.color = 'white';
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            displayData();
+        });
+    </script>
+</head>
+
+<body class="mainWrap" scroll="yes">
+    <div class="wrap">
+        <div class ="header_wrap">
+            <div class = "top">
+                <a class="join">회원가입</a>
+                <a class="login">로그인</a>
+            </div>
+            <div class="header">
+                <div class="logo">
+                    <a href="/main.do">
+                        <img src="images/bike_logo.png" alt="관리자 페이지 로고">
+                    </a>
+                </div>
+                <div class = "menu_web">
+                    <ul>
+                        <li>
+                            <a>대여소 조회</a>
+                        </li>
+                        <li>
+                            <a>문의 게시판</a>
+                        </li>
+                        <li>
+                            <a>즐겨찾기</a>
+                        </li>
+                        <li>
+                            <a>따릉이 랭킹</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard_list">
+            <h2>이용 내역</h2>
+
+            <div class="result_table">
+                <div class="mypage_button">
+                    <button type="button" id="modifyInfo" onclick="moveTo(event)">정보 수정</button>
+                    <button type="button" id="usageHistory" onclick="moveTo(event)">이용 내역</button>
+                    <button type="button" id="myList" onclick="moveTo(event)">작성 글/댓글</button>
+                </div>
+            </div>
+
+            <div class="result_table">
+                <div class="mypage_button">
+                    <button type="button" id="history" onclick="moveTo(event)">대여반납이력</button>
+                    <button type="button" id="ranking" onclick="moveTo(event)">따릉이랭킹</button>
+                </div>
+            </div>
+            <div class="result_table">
+                <table id="category_select">
+                    <tr>
+                        <th>랭킹 카테고리</th>
+                    </tr>
+                    <tr>
+                        <td><a>월간</a></td>
+                        <td><a>주간</a></td>
+                        <td><a>성별</a></td>
+                        <td><a>거주지</a></td>
+                        <td><a>체중</a></td>
+                        <td><a>나이대</a></td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+
+            <div class="result_table">
+                <table id="total_usage">
+                    <tr>
+                        <th>이용 시간</th>
+                        <th>거리</th>
+                        <th>칼로리</th>
+                        <th>탄소절감효과</th>
+                    </tr>
+                    <tr>
+                        <td>99분</td>
+                        <td>20.27km</td>
+                        <td>582.92kcal</td>
+                        <td>4.70kg</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+
+            <div class="result_table">
+                <table id="mem_usage">
+                    <tr>
+                        <th>자전거</th>
+                        <th>대여일시</th>
+                        <th>대여소</th>
+                        <th>반납일시</th>
+                        <th>반납대여소</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>테스트용1</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>테스트용2</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>테스트용3</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>테스트용4</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>테스트용5</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>테스트용6</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>테스트용7</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>테스트용8</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>테스트용9</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>테스트용10</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>테스트용11</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>테스트용12</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>테스트용13</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>테스트용14</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>테스트용15</td>
+                        <td>user1</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>테스트용16</td>
+                        <td>user2</td>
+                        <td>2023.11.03</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+
+            <div class="pagination">
+                <button onclick="changePage(currentPage - 1)" disabled="true">이전</button>
+                <button onclick="changePage(1)">1</button>
+                <button onclick="changePage(2)">2</button>
+                <button onclick="changePage(3)">3</button>
+                <button onclick="changePage(currentPage + 1)">다음</button>
+            </div>
+            <br>
+        </div>
+    </div>
+</body>
+</html>

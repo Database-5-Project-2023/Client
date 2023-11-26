@@ -1,0 +1,245 @@
+.header_wrap {
+    width:100%; 
+    border-bottom:1px solid #ededed;
+}
+
+.header {
+    width:1030px; 
+    margin:0 auto; 
+    overflow:hidden; 
+    text-align:left; 
+    display: flex;
+    padding-bottom: 10px;
+    border-bottom:1px solid #ededed;
+}
+
+.header .menu_web {
+    float:right;
+    padding-top:20px;
+}
+
+.header .menu_web ul li{
+    font-size: 150%;
+    font-weight: bold;
+    display: inline;
+    margin: 10px
+}
+
+.header .logo img{
+    width: 250px;
+    height: 39;
+    padding-top: 15px;
+    float:left;
+}
+
+.top{
+    width:1030px; 
+    margin:0 auto; 
+    overflow:hidden; 
+    text-align:right; 
+    display: flex;
+    justify-content: right;
+    padding-bottom: 10px;
+    border-bottom:1px solid #ededed;
+}
+
+.top a{
+    margin-right: 10px;
+}
+
+.dashboard{
+    background-color: rgb(230, 225, 225);
+    width: 100%;
+    height: 800px;
+    border-bottom:1px solid #ededed;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.dashboard_list {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    background-color: rgb(230, 225, 225);
+    overflow: hidden;
+    padding: 2%;
+}
+
+.list_container{
+    display: flex;
+    width: 80%;
+    margin:0 auto;
+}
+
+.list_container table{
+    width: 100%;
+}
+
+.search_container{
+    display: flex;
+    margin:0 auto;
+}
+
+.search_container a{
+    text-align: left;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.pagination {
+    display: flex;
+    margin:0 auto;
+}
+
+.result_table{
+    display: flex;
+    width: 80%;
+    margin:0 auto;
+}
+
+.result_table table{
+    width: 100%;
+}
+
+#dashboard_write_form {
+    width: 100%;
+}
+
+#dashboard_write_table {
+    width: 100%;
+}
+
+#dashboard_write_form button {
+    text-align: center;
+}
+
+#dashboard_write_table input[type="text"],
+#dashboard_write_table textarea {
+    width: 100%; 
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.detail_table{
+    display: flex;
+    flex-direction: column; 
+    width: 80%;
+    margin:0 auto;
+}
+
+.comment {
+    width: 100%;
+}
+
+.comment_write {
+    width: 100%;
+}
+
+.comment_write_form {
+    width: 100%;
+}
+
+.mypage_button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    margin: 10px;
+}
+
+.mypage_button button {
+    margin: 5px;
+    background-color: gray;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 15px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    align-items: center;
+}
+
+#total_usage td{
+
+    font-size: x-large;
+    text-align: center;
+}
+
+#category_select tr{
+
+    font-size: x-large;
+    text-align: center;
+}
+
+#mem_usage {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#mem_usage td {
+    padding: 8px;
+    text-align: center;
+}
+
+#mem_usage th {
+    padding: 20px;
+}
+
+#mem_usage tr:not(:first-child):not(:last-child) {
+    border-top: 2px solid gray;
+    padding: 8px;
+    text-align: center;
+}
+
+#mem_usage tr:last-child {
+    border-top: 2px solid gray;
+    border-bottom: 2px solid #000;
+    padding: 8px;
+    text-align: center;
+}
+
+#mem_usage tr:first-child {
+    border-top: 2px solid #000;
+    border-bottom: 2px solid green;
+    padding: 8px;
+    text-align: center;
+}
+
+.star-btn {
+    background-color: #ffd700; /* 디폴트로 색이 채워진 상태 */
+    border: 2px solid #ffd700;
+    width: 15px; /* 별의 가로 길이 조정 */
+    height: 10px; /* 별의 세로 길이 조정 */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.star-btn.active {
+    background-color: transparent;
+    border-color: #ffd700;
+}
