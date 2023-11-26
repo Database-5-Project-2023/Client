@@ -25,12 +25,20 @@ export default function Main_page(){
     function goJoin(){
         movePage('/join');
     }
+    function goMyPage(){
+        movePage('/mypage/modifyInfo');
+    }
+    function goAdmin(url){
+        window.open(url,'_blank', 'noopener, noreferrer');
+    }
 
     return(
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
+                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
+                        <a className="admin"onClick={() => goAdmin('/admin')}>관리자 페이지</a>
                         <a className="join" onClick={goJoin}>회원가입</a>
                         <a className="login" onClick={goLogin}>로그인</a>
                     </div>

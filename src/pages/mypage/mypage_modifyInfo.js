@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./styles.css";
+import "../styles.css";
 
 
 export default function Main_page(){
@@ -68,7 +68,54 @@ export default function Main_page(){
                 </div>
             </div>
             <div className="mainContainer">
-                
+            <h2>회원정보 수정</h2>
+
+<div class="result_table">
+    <div class="mypage_button">
+        <button type="button" id="modifyInfo" onclick="moveTo(event)">정보 수정</button>
+        <button type="button" id="usageHistory" onclick="moveTo(event)">이용 내역</button>
+        <button type="button" id="myList" onclick="moveTo(event)">작성 글/댓글</button>
+    </div>
+</div>
+
+<div class="result_table">
+    <div class="mypage_button">
+        <button type="button" id="modifyMemInfo" onclick="moveTo(event)">회원정보 수정</button>
+        <button type="button" id="deleteMemInfo" onclick="moveTo(event)">회원 탈퇴</button>
+    </div>
+</div>
+<div class="result_table">
+    <form id="dashboard_write_form">
+        <table id="dashboard_write_table">
+            <tr>
+                <td>아이디</td>
+                <td><input type="text" id="member_id" name="member_id" placeholder="기존 아이디 불러오기" disabled/></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input type="password" id="password" name="password" placeholder="기존 비밀번호 불러오기" required/></td>
+            </tr>
+            <tr>
+                <td>비밀번호 확인</td>
+                <td><input type="password" id="confirm_password" name="confirm_password" placeholder="비밀번호 확인" required/></td>
+            </tr>
+            <tr>
+                <td>이메일 주소</td>
+                <td><input type="email" id="email" name="email" placeholder="기존 이메일 주소 불러오기" required/></td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td><input type="tel" id="phone" name="phone" placeholder="기존 전화번호 불러오기" required/></td>
+            </tr>
+            <tr>
+                <td>거주지</td>
+                <td><input type="text" id="address" name="address" placeholder="기존 거주지 불러오기" required/></td>
+            </tr>
+        </table>
+        <button type="button" onclick="submitForm()">게시글 수정</button>
+        <button type="button" onclick="cancelForm()">수정 취소</button>
+    </form>
+</div>
             </div>
         </div>
     );

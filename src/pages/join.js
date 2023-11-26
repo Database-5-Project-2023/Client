@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 
-export default function Main_page(){
+export default function Join(){
     const movePage = useNavigate();
     function goMain(){
         movePage('/');

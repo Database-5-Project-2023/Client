@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import "./styles.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "../styles.css";
+import { useEffect, useState } from "react";
 
 
 export default function Main_page(){
@@ -28,9 +29,49 @@ export default function Main_page(){
     function goMyPage(){
         movePage('/mypage/modifyInfo');
     }
+    function goBoardDetail(id){
+        movePage('/board/detail/'+id);
+    }
     function goAdmin(url){
         window.open(url,'_blank', 'noopener, noreferrer');
     }
+    const data = [
+        {"id": 1, "title": "제목"},
+        {"id": 2, "title": "제목"},
+        {"id": 3, "title": "제목"},
+        {"id": 4, "title": "제목"},
+        {"id": 5, "title": "제목"},
+        {"id": 6, "title": "제목"},
+        {"id": 7, "title": "제목"},
+        {"id": 8, "title": "제목"},
+        {"id": 9, "title": "제목"},
+        {"id": 10, "title": "제목"},
+        {"id": 11, "title": "제목"},
+        {"id": 12, "title": "제목"},
+        {"id": 13, "title": "제목"},
+        {"id": 14, "title": "제목"},
+        {"id": 15, "title": "제목"},
+        {"id": 16, "title": "제목"},
+        {"id": 17, "title": "제목"},
+        {"id": 18, "title": "제목"},
+        {"id": 19, "title": "제목"}
+    ]
+    const [startIndex, setStartIndex] = useState(0);
+    const [endIndex, setEndIndex] = useState(10);
+
+    function changePage(pageNum){
+        setStartIndex((pageNum-1)*10);
+        if(pageNum*10 >= data.length){
+            setEndIndex(data.length);
+        }
+        else{
+            setEndIndex((pageNum)*10);
+        }
+    }
+
+
+
+    const visibleRows = data.slice(startIndex, endIndex);
 
     return(
         <div className="wrap">

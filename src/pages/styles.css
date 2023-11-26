@@ -29,7 +29,7 @@ body{
     display: flex;
     justify-content: right;
 }
-.joinlogin .join, .joinlogin .login{
+.joinlogin .join, .joinlogin .login, .joinlogin .admin, .joinlogin .mypage{
     cursor: pointer;
     font-size: 12px;
     font-weight: bold;
@@ -101,4 +101,118 @@ body{
     background-color: #179340;
     color: #fff;
     cursor: pointer;
+}
+
+.dashboard{
+    background-color: rgb(230, 225, 225);
+    width: 100%;
+    height: 800px;
+    border-bottom:1px solid #ededed;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.admin_container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    background-color: rgb(230, 225, 225);
+    overflow: hidden;
+}
+.quadrant{
+    flex: 47%;
+    height: 300px;
+    box-sizing: border-box;
+    margin: 1%;
+    padding: 10px;
+    overflow: hidden;
+}
+.top-left{
+    background-color: #f1c40f;   
+}
+.top-right{
+    background-color: #e74c3c;   
+}
+.bottom-left{
+    background-color: #2ecc71;   
+}
+.bottom-right{
+    background-color: #3498db;   
+}
+
+.search_container{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.search_container a{
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    font-size: 36px;
+    width: 500px;
+    overflow: hidden;
+}
+
+#search_input{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 20%;
+    border-radius: 4px 4px 4px 4px;
+}
+#search_btn{
+    background-color: #4CAF50;
+    text-align: center;
+    color:white;
+    border: 1px solid #4CAF50;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px 4px 4px 4px
+}
+#add_btn{
+    margin-left: 10px;
+    background-color: #4CAF50;
+    text-align: center;
+    color:white;
+    border: 1px solid #4CAF50;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px 4px 4px 4px   
+}
+
+.result_table{
+    display: flex;
+    width: 80%;
+    margin:0 auto;
+}
+
+.result_table table{
+    width: 100%;
+}
+
+.mapContainer{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.currentLocation{
+    position:absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    z-index: 10;
 }
