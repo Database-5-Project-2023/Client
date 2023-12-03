@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨</title>
+
+    <!--css 링크 추가하기-->
+    <link rel="stylesheet" href="style_dashboard.css">
+    <link rel="stylesheet" href="common.css">
+</head>
+
+<body class ="mainWrap" scroll="yes">
+    <div class ="wrap">
+        <div class ="header_wrap">
+            <div class = "top">
+                <a class="join">회원가입</a>
+                <a class="login">로그인</a>
+            </div>
+            <div class="header">
+                <div class="logo">
+                    <a href="/main.do">
+                        <img src="images/bike_logo.png" alt="관리자 페이지 로고">
+                    </a>
+                </div>
+                <div class = "menu_web">
+                    <ul>
+                        <li>
+                            <a>대여소 조회</a>
+                        </li>
+                        <li>
+                            <a>문의 게시판</a>
+                        </li>
+                        <li>
+                            <a>즐겨찾기</a>
+                        </li>
+                        <li>
+                            <a>따릉이 랭킹</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard_list">
+            <h2>실시간 날씨 조회</h2>
+            현재 위치 : <div class="place"></div>
+            <div id="refresh_button">
+                <button class="refresh_button" type="button" onclick="refreshWeather()">새로고침</button>
+            </div>
+            <div id="result_table">
+                <table id="weather_table">
+                    <tr>
+                        <td colspan="4"><img class="icon" style="width: 150px; height: 150x;" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><div class="temperature"></div> / <div class="description"></div></td>
+                    </tr>
+                    <tr>
+                        <td><img src="images/min.png" alt="최저온도" style="width: 80px; height: 100px;"/></td>
+                        <td><img src="images/max.png" alt="최고온도" style="width: 80px; height: 100px;"/></td>
+                        <td><img src="images/wind.png" alt="풍속" style="width: 80px; height: 80px;" /></td>
+                        <td><img src="images/humidity.png" alt="습도" style="width: 80px; height: 80px;"/></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">최저 온도 : <div class="temp-min"></div></td>
+                        <td rowspan="2">최고 온도 : <div class="temp-max"></div></td>
+                        <td rowspan="2">풍속 : <div class="wind"></div></td>
+                        <td rowspan="2">습도 : <div class="humidity"></div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="weather.js"></script>
+</body>
+</html>

@@ -184,16 +184,34 @@ button {
     align-items: center;
 }
 
+#category_select td{
+
+    font-size: larger;
+    text-align: center;
+}
+
+#info {
+    font-size: x-large;
+}
+
 #total_usage td{
 
     font-size: x-large;
     text-align: center;
 }
 
-#category_select tr{
+#my_ranking {
+    border-collapse: collapse;
+    width: 100%;
+}
 
-    font-size: x-large;
+#my_ranking td{
+
+    font-size: large;
     text-align: center;
+    border-top: 2px solid green;
+    border-bottom: 2px solid #000;
+    padding: 20px;
 }
 
 #mem_usage {
@@ -224,15 +242,15 @@ button {
 }
 
 #mem_usage tr:first-child {
-    border-top: 2px solid #000;
-    border-bottom: 2px solid green;
+    border-top: 2px solid green;
+    border-bottom: 2px solid #000;
     padding: 8px;
     text-align: center;
 }
 
 .star-btn {
-    background-color: #ffd700; /* 디폴트로 색이 채워진 상태 */
-    border: 2px solid #ffd700;
+    background-color: #ffd67a; /* 디폴트로 색이 채워진 상태 */
+    border: 2px solid #ffd67a;
     width: 15px; /* 별의 가로 길이 조정 */
     height: 10px; /* 별의 세로 길이 조정 */
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
@@ -241,5 +259,41 @@ button {
 
 .star-btn.active {
     background-color: transparent;
-    border-color: #ffd700;
+    border-color: #ffd67a;
+}
+
+#weather_table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#weather_table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.temperature, .description {
+    display: inline-block;
+    padding: 5px;
+}
+
+.temp-min,
+.temp-max,
+.wind,
+.humidity {
+    display: inline;
+}
+
+#result_table .place {
+    display: inline-block;
+}
+
+#refresh_button {
+    position: relative;
+}
+
+.refresh_button {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
