@@ -2,37 +2,37 @@ import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 
-export default function Join(){
+export default function Join() {
     const movePage = useNavigate();
-    function goMain(){
+    function goMain() {
         movePage('/');
     }
-    function goMap(){
+    function goMap() {
         movePage('/stationMap');
     }
-    function goBoard(){
+    function goBoard() {
         movePage('/board');
     }
-    function goFavorite(){
+    function goFavorite() {
         movePage('/favorite');
     }
-    function goRanking(){
-        movePage('/ranking');
+    function goRanking() {
+        movePage('/mypage/ranking');
     }
-    function goLogin(){
+    function goLogin() {
         movePage('/login');
     }
-    function goJoin(){
+    function goJoin() {
         movePage('/join');
     }
 
-    return(
+    return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="header">
-                    <div class="logo">
+                    <div className="logo">
                         <a onClick={goMain}>
-                            <img src="/images/bike_logo.png" alt="로고"/>
+                            <img src="/images/bike_logo.png" alt="로고" />
                         </a>
                     </div>
                 </div>
@@ -40,7 +40,7 @@ export default function Join(){
             <div className="mainContainer">
                 <h1>회원가입</h1>
                 <form name="signupForm" method="post">
-                    
+
                     <input type="text" id="id" name="id" placeholder="아이디" required></input>
 
                     <input type="password" id="password" name="password" placeholder="비밀번호" required></input>

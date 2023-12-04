@@ -34,9 +34,6 @@ export default function Main_page() {
     function goDotMap() {
         movePage('/dotmap');
     }
-    function goHeatMap() {
-        movePage('/heatmap');
-    }
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
@@ -66,7 +63,7 @@ export default function Main_page() {
 
     const mapRef = useRef(null);
 
-    var markers = [];
+    var dotmaps = [];
     var infoWindow = [];
 
     const [data, setData] = useState(() => []);
@@ -74,20 +71,11 @@ export default function Main_page() {
 
     useEffect(() => {
         mapRef.current = new naver.maps.Map("map", {
+            zoom: 11,
             tileTransition: false,
             zoomControl: true,
             disableKineticPan: false,
-            mapTypes: new naver.maps.MapTypeRegistry({
-                'normal': naver.maps.NaverStyleMapTypeOptions.getNormalMap(
-                  {
-                    overlayType: 'bg.br.ol.lko'
-                  }
-                )
-              })
         })
-
-        var kw = new naver.maps.LatLng(37.6227794, 127.0614598);
-        mapRef.current.setCenter(kw);
         axios('/station/location')
             .then(res => {
                 setData(res.data);
@@ -100,8 +88,6 @@ export default function Main_page() {
 
     /*지도 띄우기 및 현재 위치 가져오기 */
     useEffect(() => {
-
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setMyLocation({
@@ -113,39 +99,17 @@ export default function Main_page() {
             window.alert("현재위치를 알수 없습니다.");
         }
         for (let i = 0; i < data.length; i++) {
-            var position = new naver.maps.LatLng(data[i].station_latitude, data[i].station_longitude);
-            var marker = new naver.maps.Marker({
-                position: position,
-                map: mapRef.current,
-                icon: {
-                    url: '/images/icon_big1.png',
-                    size: { width: 50, height: 50 },
-                    scaledSize: { width: 20, height: 20 },
-                    origin: new naver.maps.Point(0, 0),
-                    anchor: new naver.maps.Point(0, 0),
-                },
-            })
-            marker.addListener('click', () => {
-                const tmpid = data[i].station_id;
-                axios(`/station/?stationId=${tmpid}`)
-                    .then(res => {
-                        setBikeInfo(res.data);
-                    })
-
-                setVisibleInfo(true);
-            })
-            markers.push(marker);
+            dotmaps.push(new naver.maps.LatLng(data[i].station_latitude, data[i].station_longitude));
         }
+        console.log(dotmaps);
     }, [data]);
 
     useEffect(() => {
-        console.log(bikeInfo);
-        setGeneralCnt(bikeInfo.general_bike);
-        setSproutCnt(bikeInfo.sprout_bike);
-        setStationId(bikeInfo.id);
-        setStationName(bikeInfo.station_addr2);
-        setHolderCnt(bikeInfo.remainder_holder)
-    }, [bikeInfo]);
+        var dotmap = new naver.maps.visualization.HeatMap({
+            map: mapRef.current,
+            data: dotmaps
+        });
+    }, [dotmaps]);
 
     /*현위치 marker로 표시하기 */
 
@@ -154,9 +118,6 @@ export default function Main_page() {
             const currentPosition = [myLocation.latitude, myLocation.longitude];
             var kw = new naver.maps.LatLng(currentPosition[0], currentPosition[1]);
             mapRef.current.setCenter(kw);
-            mapRef.current.setOptions({
-                zoom: 18
-            })
 
             //맵에 현위치 마커 표시하기
             const currentMarker = new naver.maps.Marker({
@@ -173,11 +134,7 @@ export default function Main_page() {
 
 
         }
-    };
-
-    const closeInfo = () => {
-        setVisibleInfo(false)
-    };
+    }
 
 
     return (
@@ -220,41 +177,10 @@ export default function Main_page() {
                     <div>
                         <div id="map" style={{ width: "900px", height: "700px" }}>
                             <img src="/images/curLoc_btn.png" className="currentLocation" onClick={curLocHandler}></img>
-                            <div className="location_info" style={{ display: visibleInfo ? "block" : "none" }}>
-                                <div className="location_info_wrap" >
-                                    <div className="loc_info_header">
-                                        <a>{stationId}.</a>
-                                        <a>{stationName}</a>
-                                        <img src="/images/yellowStar.png" className="bookmarkStar"></img>
-                                        <img onClick={closeInfo} src="/images/close_02.png" className="closeBtn"></img>
-                                    </div>
-                                    <div className="loc_info_body">
-                                        <div className="bikeCntInfo">
-                                            <a>일반 따릉이</a> 
-                                            <a>{generalCnt}</a>
-                                        </div>
-                                        <div className="bikeCntInfo">
-                                            <a>새싹 따릉이</a> 
-                                            <a>{sproutCnt}</a>
-                                        </div>
-                                        <div className="bikeCntInfo">
-                                            <a>남은 거치대 수</a> 
-                                            <a>{generalCnt + sproutCnt + holderCnt}</a>
-                                        </div>
-                                    </div>
-                                    <div className="loc_info_bottom">
-                                        <button>대여하기</button>
-                                        <button>반납하기</button>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="heatDotMap">
-                <button onClick={goDotMap}>점지도 보러 가기</button>
-                <button onClick={goHeatMap}>열지도 보러 가기</button>
             </div>
         </div>
     );

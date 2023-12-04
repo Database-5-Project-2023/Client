@@ -2,51 +2,60 @@ import { useNavigate } from "react-router-dom";
 import "../styles.css";
 
 
-export default function Main_page(){
+export default function Main_page() {
     const movePage = useNavigate();
-    function goMain(){
+    function goMain() {
         movePage('/');
     }
-    function goMap(){
+    function goMap() {
         movePage('/stationMap');
     }
-    function goBoard(){
+    function goBoard() {
         movePage('/board');
     }
-    function goFavorite(){
+    function goFavorite() {
         movePage('/favorite');
     }
-    function goRanking(){
-        movePage('/ranking');
+    function goRanking() {
+        movePage('/mypage/ranking');
     }
-    function goLogin(){
+    function goLogin() {
         movePage('/login');
     }
-    function goJoin(){
+    function goJoin() {
         movePage('/join');
     }
-    function goMyPage(){
+    function goMyPage() {
         movePage('/mypage/modifyInfo');
     }
-    function goAdmin(url){
-        window.open(url,'_blank', 'noopener, noreferrer');
+    function goMyPage_delete() {
+        movePage('/mypage/deleteInfo');
+    }
+    function goMyPage_myPost() {
+        movePage('/mypage/myPost')
+    }
+    function goMyPage_usageHistory() {
+        movePage('/mypage/usageHistory')
+    }
+    function goAdmin(url) {
+        window.open(url, '_blank', 'noopener, noreferrer');
     }
 
-    return(
+    return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
                         <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin"onClick={() => goAdmin('/admin')}>관리자 페이지</a>
+                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
                         <a className="join" onClick={goJoin}>회원가입</a>
                         <a className="login" onClick={goLogin}>로그인</a>
                     </div>
                 </div>
                 <div className="header">
-                    <div class="logo">
+                    <div className="logo">
                         <a onClick={goMain}>
-                            <img src="/images/bike_logo.png" alt="로고"/>
+                            <img src="/images/bike_logo.png" alt="로고" />
                         </a>
                     </div>
                     <div className="menu_web">
@@ -68,54 +77,45 @@ export default function Main_page(){
                 </div>
             </div>
             <div className="mainContainer">
-            <h2>회원정보 수정</h2>
+                <h2>회원정보 수정</h2>
 
-<div class="result_table">
-    <div class="mypage_button">
-        <button type="button" id="modifyInfo" onclick="moveTo(event)">정보 수정</button>
-        <button type="button" id="usageHistory" onclick="moveTo(event)">이용 내역</button>
-        <button type="button" id="myList" onclick="moveTo(event)">작성 글/댓글</button>
-    </div>
-</div>
+                <div className="result_table">
+                    <div className="mypage_button">
+                        <button type="button" id="modifyInfo" onClick={goMyPage}>정보 수정</button>
+                        <button type="button" id="usageHistory" onClick={goMyPage_usageHistory}>이용 내역</button>
+                        <button type="button" id="myList" onClick={goMyPage_myPost}>작성 글/댓글</button>
+                    </div>
+                </div>
 
-<div class="result_table">
-    <div class="mypage_button">
-        <button type="button" id="modifyMemInfo" onclick="moveTo(event)">회원정보 수정</button>
-        <button type="button" id="deleteMemInfo" onclick="moveTo(event)">회원 탈퇴</button>
-    </div>
-</div>
-<div class="result_table">
-    <form id="dashboard_write_form">
-        <table id="dashboard_write_table">
-            <tr>
-                <td>아이디</td>
-                <td><input type="text" id="member_id" name="member_id" placeholder="기존 아이디 불러오기" disabled/></td>
-            </tr>
-            <tr>
-                <td>비밀번호</td>
-                <td><input type="password" id="password" name="password" placeholder="기존 비밀번호 불러오기" required/></td>
-            </tr>
-            <tr>
-                <td>비밀번호 확인</td>
-                <td><input type="password" id="confirm_password" name="confirm_password" placeholder="비밀번호 확인" required/></td>
-            </tr>
-            <tr>
-                <td>이메일 주소</td>
-                <td><input type="email" id="email" name="email" placeholder="기존 이메일 주소 불러오기" required/></td>
-            </tr>
-            <tr>
-                <td>전화번호</td>
-                <td><input type="tel" id="phone" name="phone" placeholder="기존 전화번호 불러오기" required/></td>
-            </tr>
-            <tr>
-                <td>거주지</td>
-                <td><input type="text" id="address" name="address" placeholder="기존 거주지 불러오기" required/></td>
-            </tr>
-        </table>
-        <button type="button" onclick="submitForm()">게시글 수정</button>
-        <button type="button" onclick="cancelForm()">수정 취소</button>
-    </form>
-</div>
+                <div className="result_table">
+                    <div className="mypage_button">
+                        <button type="button" id="modifyMemInfo" onClick={goMyPage}>회원정보 수정</button>
+                        <button type="button" id="deleteMemInfo" onClick={goMyPage_delete}>회원 탈퇴</button>
+                    </div>
+                </div>
+                <div className="result_table">
+                    <div className="info_message">
+                        <p>
+                            <a style={{color:'red'}}>회원탈퇴를 </a><a>신청합니다.</a>
+                        </p>
+                        <p>서울자전거를 이용해 주셔서 감사합니다.</p>
+                        <p>회원탈퇴를 하실 경우 아래와 같이 회원정보가 처리됩니다.</p>
+                        <div style={{backgroundColor:'lightgray'}}>
+                            <ul className="deleteInfo">
+                                <li>
+                                    탈퇴 신청 즉시 회원탈퇴 처리되며, 해당 아이디의 회원정보 및 마일리지는 삭제처리되며, 복원할 수 없습니다.
+                                </li>
+                                <li>
+                                    회원탈퇴 이후 같은 아이디로는 재가입이 불가능 합니다.
+                                </li>
+                                <li>
+                                    이용권 기간이 남아있는 경우 즉시 탈퇴가 불가능 하오니 고객센터에 문의 바랍니다.
+                                </li>
+                            </ul>
+                        </div>
+                        <button className="memberDeleteBtn" type="button" >회원 탈퇴</button>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -1,43 +1,76 @@
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function AdminBike(){
+export default function AdminBike() {
     const movePage = useNavigate();
-    function goAdmin(){
+    function goAdmin() {
         movePage('/admin')
     }
-    function goAdminBike(){
+    function goAdminBike() {
         movePage('/admin/bike')
     }
-    function goAdminStation(){
+    function goAdminStation() {
         movePage('/admin/station')
     }
-    function goAdminBoard(){
+    function goAdminBoard() {
         movePage('/admin/board')
     }
-    function goAdminMember(){
+    function goAdminMember() {
         movePage('/admin/member')
     }
 
-    const openPopupWindow2 = () => {
-        const popupWindow = window.open('', '_blank', 'width=600,height=400,left=200,top=200');
-        popupWindow.document.write(
-            '<h1>팝업 창</h1>'
-            );
-        // 추가적인 HTML 콘텐츠나 스크립트를 여기에 작성할 수 있습니다.
-    };
+    function openBikePopup() {
+        window.open('/admin/bike/add', 'PopupWindow', 'width=800px,height=900px,left=200px,top=200px');
+    }
+    /*
+    const data = [
+        { "id": 1, "title": "제목" },
+        { "id": 2, "title": "제목" },
+        { "id": 3, "title": "제목" },
+        { "id": 4, "title": "제목" },
+        { "id": 5, "title": "제목" },
+        { "id": 6, "title": "제목" },
+        { "id": 7, "title": "제목" },
+        { "id": 8, "title": "제목" },
+        { "id": 9, "title": "제목" },
+        { "id": 10, "title": "제목" },
+        { "id": 11, "title": "제목" },
+        { "id": 12, "title": "제목" },
+        { "id": 13, "title": "제목" },
+        { "id": 14, "title": "제목" },
+        { "id": 15, "title": "제목" },
+        { "id": 16, "title": "제목" },
+        { "id": 17, "title": "제목" },
+        { "id": 18, "title": "제목" },
+        { "id": 19, "title": "제목" }
+    ]*/
+    const [data, setData] = useState(() => []);
+    useEffect(() => {
+        axios('/admin/bike_manage')
+            .then(res => {
+                setData(res.data);
+            })
+    }, [])
+    useEffect(() => {
+        console.log(data);
+    }, [data])
+    const [startIndex, setStartIndex] = useState(0);
+    const [endIndex, setEndIndex] = useState(10);
+    const visibleRows = data.slice(startIndex, endIndex);
 
-    return(
+    return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
-                    
+
                 </div>
                 <div className="header">
-                    <div class="logo">
+                    <div className="logo">
                         <a onClick={goAdmin}>
-                            <img src="/images/admin_logo.png" alt="로고"/>
+                            <img src="/images/admin_logo.png" alt="로고" />
                         </a>
                     </div>
                     <div className="menu_web">
@@ -58,61 +91,47 @@ export default function AdminBike(){
                     </div>
                 </div>
             </div>
-            <div class="admin_container">
-                <div class="search_container">
+            <div className="admin_container">
+                <div className="search_container">
                     <a>따릉이 시설 관리</a>
-                    <input type="text" placeholder="자전거 검색" id="search_input"/>
+                    <input type="text" placeholder="자전거 검색" id="search_input" />
                     <button type="button" id="search_btn">검색</button>
-                    <button type="button" id="add_btn" onClick={openPopupWindow2}>따릉이 추가</button>
+                    <button type="button" id="add_btn" onClick={openBikePopup}>따릉이 추가</button>
                 </div>
             </div>
-            <div class="admin_container">
-                <div class="result_table">
+            <div className="admin_container">
+                <div className="result_table">
                     <table border="1">
-                        <tr>
-                            <th>bike_id</th>
-                            <th>station_id</th>
-                            <th>bike_type</th>
-                            <th>bike_status</th>
+                        <tbody>
+                            <th>bike_ID</th>
+                            <th>station_ID</th>
+                            <th>타입</th>
+                            <th>상태</th>
                             <th>삭제</th>
                             <th>수리 여부</th>
-                        </tr>
-                        <tr>
-                            <td>ex_id</td>
-                            <td>ex_station</td>
-                            <td>ex_type</td>
-                            <td>ex_status</td>
-                            <td>
-                                <form action="/bike/delete/~" method="post">
-                                    <button type="submit">삭제</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="/bike/fix/~" method="post">
-                                    <button type="submit">수리완료</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ex_id</td>
-                            <td>ex_station</td>
-                            <td>ex_type</td>
-                            <td>ex_status</td>
-                            <td>
-                                <form action="/bike/delete/~" method="post">
-                                    <button type="submit">삭제</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="/bike/fix/~" method="post">
-                                    <button type="submit">수리완료</button>
-                                </form>
-                            </td>
-                        </tr>
+                            {visibleRows.map((row, index) => (
+                                <tr key={index}>
+                                    <td>{row.bike_id}</td>
+                                    <td>{row.station_id}</td>
+                                    <td>{row.bike_type}</td>
+                                    <td>{row.bike_status ? "고장" : "정상"}</td>
+                                    <td>
+                                        <form action="/bike/delete/~" method="post">
+                                            <button type="submit">삭제</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/bike/fix/~" method="post">
+                                            <button type="submit">수리완료</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </table>
                 </div>
             </div>
-            
+
         </div>
     );
 }

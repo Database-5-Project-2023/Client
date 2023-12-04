@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { useState } from "react";
 
 
 export default function Main_page() {
@@ -28,8 +29,8 @@ export default function Main_page() {
     function goMyPage() {
         movePage('/mypage/modifyInfo');
     }
-    function goMyPage_delete() {
-        movePage('/mypage/deleteInfo');
+    function goAdmin(url) {
+        window.open(url, '_blank', 'noopener, noreferrer');
     }
     function goMyPage_myPost() {
         movePage('/mypage/myPost')
@@ -37,10 +38,20 @@ export default function Main_page() {
     function goMyPage_usageHistory() {
         movePage('/mypage/usageHistory')
     }
-
-    function goAdmin(url) {
-        window.open(url, '_blank', 'noopener, noreferrer');
+    function goMyPage_ranking() {
+        movePage('/mypage/ranking')
     }
+
+    const data = [
+        { "id": 1, "title": "랭킹1" },
+        { "id": 2, "title": "랭킹2" },
+        { "id": 3, "title": "랭킹3" },
+        { "id": 4, "title": "랭킹4" },
+        { "id": 5, "title": "랭킹5" }
+    ]
+    const [startIndex, setStartIndex] = useState(0);
+    const [endIndex, setEndIndex] = useState(10);
+    const visibleRows = data.slice(startIndex, endIndex);
 
     return (
         <div className="wrap">
@@ -78,8 +89,7 @@ export default function Main_page() {
                 </div>
             </div>
             <div className="mainContainer">
-                <h2>회원정보 수정</h2>
-
+                <h2>이용 내역</h2>
                 <div className="result_table">
                     <div className="mypage_button">
                         <button type="button" id="modifyInfo" onClick={goMyPage}>정보 수정</button>
@@ -88,44 +98,23 @@ export default function Main_page() {
                     </div>
                 </div>
 
-                <div className="result_table">
-                    <div className="mypage_button">
-                        <button type="button" id="modifyMemInfo" onClick={goMyPage}>회원정보 수정</button>
-                        <button type="button" id="deleteMemInfo" onClick={goMyPage_delete}>회원 탈퇴</button>
+                <div class="result_table">
+                    <div class="mypage_button">
+                        <button type="button" id="history" onClick={goMyPage_usageHistory}>대여반납이력</button>
+                        <button type="button" id="ranking" onClick={goMyPage_ranking}>따릉이랭킹</button>
                     </div>
                 </div>
-                <div className="result_table">
-                    <form id="dashboard_write_form">
-                        <table id="dashboard_write_table">
-                            <tbody>
-                                <tr>
-                                    <td>아이디</td>
-                                    <td><input type="text" id="member_id" name="member_id" placeholder="기존 아이디 불러오기" disabled /></td>
+                <div class="result_table">
+                    <table border="1">
+                        <tbody>
+                            {visibleRows.map((row, index) => (
+                                <tr key={index}>
+                                    <td style={{ cursor: 'pointer' }}>{row.id}</td>
+                                    <td style={{ cursor: 'pointer' }}>{row.title}</td>
                                 </tr>
-                                <tr>
-                                    <td>비밀번호</td>
-                                    <td><input type="password" id="password" name="password" placeholder="기존 비밀번호 불러오기" required /></td>
-                                </tr>
-                                <tr>
-                                    <td>비밀번호 확인</td>
-                                    <td><input type="password" id="confirm_password" name="confirm_password" placeholder="비밀번호 확인" required /></td>
-                                </tr>
-                                <tr>
-                                    <td>이메일 주소</td>
-                                    <td><input type="email" id="email" name="email" placeholder="기존 이메일 주소 불러오기" required /></td>
-                                </tr>
-                                <tr>
-                                    <td>전화번호</td>
-                                    <td><input type="tel" id="phone" name="phone" placeholder="기존 전화번호 불러오기" required /></td>
-                                </tr>
-                                <tr>
-                                    <td>거주지</td>
-                                    <td><input type="text" id="address" name="address" placeholder="기존 거주지 불러오기" required /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button type="button" onClick="submitForm()">정보 수정</button>
-                    </form>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

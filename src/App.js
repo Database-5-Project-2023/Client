@@ -8,7 +8,7 @@ import BoardDetail from "./pages/board/board_detail";
 import BoardWrite from "./pages/board/board_write";
 import BoardModify from "./pages/board/board_modify";
 import Favorite from "./pages/favorite";
-import Ranking from "./pages/ranking";
+import MypageRanking from "./pages/mypage/mypage_ranking";
 import Admin from "./pages/admin/admin";
 import AdminMember from "./pages/admin/admin_member";
 import AdminBike from "./pages/admin/admin_bike";
@@ -16,7 +16,14 @@ import AdminBikeAdd from "./pages/admin/admin_bike_add";
 import AdminStation from "./pages/admin/admin_station";
 import AdminStationAdd from "./pages/admin/admin_station_add";
 import AdminBoard from "./pages/admin/admin_board";
-import MyPageMODIFYINFO from "./pages/mypage/mypage_modifyInfo";
+import MypageModifyInfo from "./pages/mypage/mypage_modifyInfo";
+import MypageDeleteInfo from "./pages/mypage/mypage_deleteInfo";
+import MypageMyComment from "./pages/mypage/mypage_myComment";
+import MypageMyPost from "./pages/mypage/mypage_myPost";
+import MypageUsageHistory from "./pages/mypage/mypage_usageHistory";
+import DotMap from "./pages/dotmap";
+import HeatMap from "./pages/heatmap";
+
 function App() {
   return (
     <BrowserRouter>
@@ -48,9 +55,6 @@ function App() {
         {/*즐겨찾기*/}
         <Route path='/favorite' element={<Favorite/>}/>
 
-        {/*따릉이랭킹*/}
-        <Route path='/ranking' element={<Ranking/>}/>
-
         {/*관리자_대시보드*/}
         <Route path='/admin' element={<Admin/>}/>
 
@@ -72,8 +76,23 @@ function App() {
         {/*관리자_게시판관리*/}
         <Route path='/admin/board' element={<AdminBoard/>}/>
 
-        {/*마이페이지 중 */}
-        <Route path='/mypage/modifyInfo' element={<MyPageMODIFYINFO/>}/>
+        {/*마이페이지_정보수정 */}
+        <Route path='/mypage/modifyInfo' element={<MypageModifyInfo/>}/>
+        {/*마이페이지_회원탈퇴 */}
+        <Route path='/mypage/deleteInfo' element={<MypageDeleteInfo/>}/>
+        {/*마이페이지_내댓글 */}
+        <Route path='/mypage/myComment' element={<MypageMyComment/>}/>
+        {/*마이페이지_내글 */}
+        <Route path='/mypage/myPost' element={<MypageMyPost/>}/>
+        {/*마이페이지_사용이력 */}
+        <Route path='/mypage/usageHistory' element={<MypageUsageHistory/>}/>
+        {/*따릉이랭킹*/}
+        <Route path='/mypage/ranking' element={<MypageRanking/>}/>
+
+        {/*점지도*/}
+        <Route path='/dotmap' element={<DotMap/>}/>
+        {/*열지도*/}
+        <Route path='/heatmap' element={<HeatMap/>}/>
         
       </Routes>
     </BrowserRouter>
