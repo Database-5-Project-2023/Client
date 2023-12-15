@@ -72,6 +72,7 @@ export default function Main_page({ loginSession, setLoginSession, adminSession,
                 },
             });
             alert('게시글이 정상적으로 추가되었습니다.');
+            movePage('/board')
         } catch (error) {
             alert(`${error.message}`)
             console.error('Error:', error);
@@ -138,10 +139,6 @@ export default function Main_page({ loginSession, setLoginSession, adminSession,
                                 <td>
                                     <textarea rows="10" cols="50" name="content" onChange={handleChange}></textarea>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>이미지 파일 첨부</td>
-                                <td><input type="file" name="image" accept="image/*" onChange={handleFileChange}/></td>
                             </tr>
                         </table>
                         <button type="submit">게시글 작성</button>

@@ -200,7 +200,11 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
                 <div className="result_table">
                     <table border="1">
                         <tbody>
+                            <th>순위</th>
+                            <th>이용자</th>
+                            <th>거리</th>
                             {visibleRows.map((row, index) => (
+                                
                                 <tr key={index}>
                                     <td >{row.rank}</td>
                                     <td >{row.user_id}</td>

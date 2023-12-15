@@ -199,7 +199,8 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
     const [destLog, setDestLog] = useState(0);
     const [pathValue, setPathValue] = useState([]);
 
-
+    const clientID = 'uemes188wq';
+    const clientSecret = 'yvdxX29vf6rhuJ2vrJ7yYQuilMI1HwQIAJWGNUjl'
 
     const startLocBtn = (id) => {
         setStartId(id)

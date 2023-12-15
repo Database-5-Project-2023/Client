@@ -99,7 +99,10 @@ export default function AdminStation({loginSession, setLoginSession, adminSessio
         }
     }
     const clickHandler = () =>{
-        alert("대여소가 폐쇄되었습니다.");
+        axios('/admin/station/add')
+            .then(res => {
+                setData(res.data);
+            })
     }
 
     return (

@@ -37,6 +37,7 @@ export default function Login({loginSession, setLoginSession, adminSession, setA
     useEffect(()=>{
         if(isLogin==true){
             setLoginSession(id);
+            setAdminSession(true);
             movePage('/');
         }
         

@@ -110,6 +110,11 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
             .then(res => {
                 setData(res.data);
             })
+        
+            axios('/station/borrow/bike')
+            .then(res => {
+                setData(res.data);
+            })
     }, [])
 
     useEffect(() => {
@@ -148,7 +153,10 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
                     .then(res => {
                         setBikeInfo(res.data);
                     })
-
+                    axios('/bike/report')
+                    .then(res => {
+                        setData(res.data);
+                    })
                 setVisibleInfo(true);
             })
             markers.push(marker);
@@ -162,6 +170,10 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
         setStationId(bikeInfo.id);
         setStationName(bikeInfo.station_addr2);
         setHolderCnt(bikeInfo.remainder_holder)
+        axios('/station/return/bike')
+            .then(res => {
+                setData(res.data);
+            })
     }, [bikeInfo]);
 
     /*현위치 marker로 표시하기 */
@@ -203,12 +215,22 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
 
     const [showRental, setShowRental] = useState(false);
     const rentalHandler = () =>{
-      
+        alert("일반따릉이를 대여신청하였습니다.")
     }
 
     const [showReturn, setShowReturn]=useState(false);
     const returnHandler = () =>{
         setShowReturn(true);
+    }
+
+    const haveError = () =>{
+        alert("고장 등록되었습니다.")
+        setShowReturn(false);
+    }
+
+    const noError = () =>{
+        alert("반납처리되었습니다.")
+        setShowReturn(false);
     }
 
     return (
@@ -276,8 +298,13 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
                                     </div>
                                     <div className="loc_info_bottom">
                                         <button onClick={rentalHandler}>대여하기</button>
-                                        <button>반납하기</button>
+                                        <button onClick={returnHandler}>반납하기</button>
                                     </div>
+                                    {showReturn&&(
+                                        <a>따릉이 고장이 있었나요?</a>
+                                    )}
+                                    {showReturn&&(<button onClick={haveError}>예</button>)}
+                                    {showReturn&&(<button onClick={noError}>아니오</button>)}
                                 </div>
                             </div>
                         </div>
