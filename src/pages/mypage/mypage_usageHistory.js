@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -44,26 +45,48 @@ export default function Main_page() {
     function goMyPage_ranking() {
         movePage('/mypage/ranking')
     }
-    const data = [
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
+    /*const data = [
         { "id": 1, "title": "이력1" },
         { "id": 2, "title": "이력2" },
         { "id": 3, "title": "이력3" },
         { "id": 4, "title": "이력4" },
         { "id": 5, "title": "이력5" }
-    ]
+    ]*/
+    const [data, setData] = useState(()=>[]);
+    useEffect(()=>{
+        axios(`/history?id=${loginSession}`)
+            .then(res => {
+                setData(res.data);
+            })
+    },[])
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(10);
     const visibleRows = data.slice(startIndex, endIndex);
-
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+            alert('로그인을 먼저 진행해야합니다.');
+            movePage('/');
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -110,10 +133,24 @@ export default function Main_page() {
                 <div class="result_table">
                     <table border="1">
                         <tbody>
+                            <th>UserId</th>
+                            <th>BikeID</th>
+                            <th>시작주소</th>
+                            <th>도착주소</th>
+                            <th>시작시간</th>
+                            <th>도착시간</th>
+                            <th>거리</th>
+                            <th>반납처리</th>
                             {visibleRows.map((row, index) => (
                                 <tr key={index}>
-                                    <td style={{ cursor: 'pointer' }}>{row.id}</td>
-                                    <td style={{ cursor: 'pointer' }}>{row.title}</td>
+                                    <td >{row.user_id}</td>
+                                    <td >{row.bike_id}</td>
+                                    <td >{row.starting_station_addr}</td>
+                                    <td >{row.arrival_station_addr}</td>
+                                    <td >{row.starting_time}</td>
+                                    <td >{row.arrival_time}</td>
+                                    <td >{row.distance}</td>
+                                    <td >{row.return_status ? '완료': '미완'}</td>
                                 </tr>
                             ))}
                         </tbody>

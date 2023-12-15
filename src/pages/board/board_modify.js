@@ -3,7 +3,7 @@ import "../styles.css";
 import { useEffect, useState } from "react";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -35,6 +35,11 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
     const data = [
         { "id": 1, "title": "제목" },
         { "id": 2, "title": "제목" },
@@ -58,7 +63,14 @@ export default function Main_page() {
     ]
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(10);
-
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     function changePage(pageNum) {
         setStartIndex((pageNum - 1) * 10);
         if (pageNum * 10 >= data.length) {
@@ -78,10 +90,11 @@ export default function Main_page() {
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">

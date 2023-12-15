@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -39,6 +39,11 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
     /*
     const data = [
         { "id": 1, "title": "제목" },
@@ -61,6 +66,14 @@ export default function Main_page() {
         { "id": 18, "title": "제목" },
         { "id": 19, "title": "제목" }
     ]*/
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     const [data, setData] = useState(()=>[]);
     useEffect(()=>{
         axios('/admin/post_manage')
@@ -93,10 +106,11 @@ export default function Main_page() {
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -125,7 +139,7 @@ export default function Main_page() {
             </div>
             <div className="mainContainer">
                 <h2>게시글 리스트</h2>
-                <button type="button" onClick={goBoardWrite}>게시글 작성</button>
+                <button type="button" onClick={goBoardWrite} style={{width:'200px', fontSize:'20px'}}>게시글 작성</button>
                 <div className="result_table">
                     <table border="1">
                         <tbody>
@@ -136,8 +150,8 @@ export default function Main_page() {
                             <th>날짜</th>
                             {visibleRows.map((row, index) => (
                                 <tr key={index}>
-                                    <td style={{ cursor: 'pointer' }} onClick={() => goBoardDetail(row.post_id)}>{row.post_id}</td>
-                                    <td>{row.title}</td>
+                                    <td  >{row.post_id}</td>
+                                    <td style={{ cursor: 'pointer' }} onClick={() => goBoardDetail(row.post_id)}>{row.title}</td>
                                     <td>{row.creator_id}</td>
                                     <td>{row.hit}</td>
                                     <td>{row.created_at.split('T')[0]}</td>
@@ -153,8 +167,8 @@ export default function Main_page() {
                     <button onClick={() => changePage(3)}>3</button>
                     <button >다음</button>
                 </div>
-                <div className="search_container">
-                    <input type="text" placeholder="제목 검색" id="title_search" />
+                <div className="search_container" style={{marginLeft:'10%', textAlign:'center'}}>
+                    <input type="text" placeholder="제목 검색" id="title_search" style={{width:'300px'}}/>
                     <button type="button" id="title_search_btn">검색</button>
                 </div>
             </div>

@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
+import { useState } from "react";
+import axios from "axios";
 
 
-export default function Join() {
+export default function Join({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -25,6 +27,32 @@ export default function Join() {
     function goJoin() {
         movePage('/join');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
+
+    const [formData, setFormData] = useState({});
+
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setFormData(prevState => ({...prevState, [name]: value}));
+        console.log(formData);
+    };
+    
+    const handleSubmit = async(event) =>{
+        event.preventDefault();
+        try{
+            const response = await axios.post('/members/join', formData);
+            alert("회원가입 되었습니다.");
+            movePage('/');
+        }catch(error){
+            alert(`${error.message}`)
+            console.error('Error:',error);
+        }
+        //window.close();
+    };
 
     return (
         <div className="wrap">
@@ -39,31 +67,31 @@ export default function Join() {
             </div>
             <div className="mainContainer">
                 <h1>회원가입</h1>
-                <form name="signupForm" method="post">
+                <form onSubmit={handleSubmit}>
 
-                    <input type="text" id="id" name="id" placeholder="아이디" required></input>
+                    <input type="text" id="id" name="id" onChange={handleChange} placeholder="아이디" required></input>
 
-                    <input type="password" id="password" name="password" placeholder="비밀번호" required></input>
+                    <input type="password" id="pwd" name="pwd" onChange={handleChange} placeholder="비밀번호" required></input>
 
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 재확인" required></input>
+                    <input type="password" id="confirmPwd" name="confirmPwd" placeholder="비밀번호 재확인" required></input>
 
-                    <input type="email" id="email" name="email" placeholder="이메일" required></input>
+                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="이메일" required></input>
 
-                    <input type="text" id="name" name="name" placeholder="이름" required></input>
+                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="이름" required></input>
 
-                    <input type="date" id="birthdate" name="birthdate" placeholder="생년월일" required></input>
+                    <input type="text" id="age" name="age" onChange={handleChange} placeholder="나이" required></input>
 
                     <label for="gender">성별:</label>
-                    <select id="gender" name="gender" required>
-                        <option value="male">남성</option>
-                        <option value="female">여성</option>
+                    <select id="gender" name="gender" onChange={handleChange} required>
+                        <option value="M">남성</option>
+                        <option value="F">여성</option>
                     </select>
 
-                    <input type="tel" id="phone" name="phone" placeholder="휴대전화" required></input>
+                    <input type="tel" id="phone_num" name="phone_num" onChange={handleChange} placeholder="휴대전화" required></input>
 
-                    <input type="text" id="location" name="location" placeholder="거주지" required></input>
+                    <input type="text" id="address" name="address" onChange={handleChange} placeholder="거주지" required></input>
 
-                    <input type="number" id="weight" name="weight" placeholder="체중" required></input>
+                    <input type="number" id="weight" name="weight" onChange={handleChange} placeholder="체중" required></input>
 
                     <button type="submit">가입하기</button>
 

@@ -5,7 +5,7 @@ import useFetch from './usefetch';
 import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -37,14 +37,25 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
     const [visibleInfo, setVisibleInfo] = useState(false);
     const [stationId, setStationId] = useState(0);
     const [stationName, setStationName] = useState(null);
     const [generalCnt, setGeneralCnt] = useState(0);
     const [sproutCnt, setSproutCnt] = useState(0);
     const [holderCnt, setHolderCnt] = useState(0);
-
-
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     /*
     const data = [
         { "Lat": 37.6227794, "Lng": 127.0614598,"id":1234, "name": "광운대역", "generalCnt":10, "sproutCnt": 5},
@@ -142,10 +153,11 @@ export default function Main_page() {
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">

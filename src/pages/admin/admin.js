@@ -10,7 +10,7 @@ function transformData(data) {
     });
 }
 
-export default function Admin() {
+export default function Admin({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goAdmin() {
         movePage('/admin')
@@ -31,6 +31,8 @@ export default function Admin() {
     const [recentReport, setRecentReport] = useState(() => []);
     const [topBorough, setTopBorough] = useState(() => []);
     const [recentPost, setRecentPost] = useState(() => []);
+
+    
     useEffect(() => {
         axios('/admin/dashboard/memGraph')
             .then(res => {

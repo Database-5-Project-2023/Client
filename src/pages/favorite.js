@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -32,25 +33,49 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
-
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
+/*
     const data = [
         { "id": 2908, "title": "광운대학교 중앙도서관" },
         { "id": 5314, "title": "월계 1동 주민센터 앞" },
         { "id": 1602, "title": "광운대역 앞" }
-    ]
+    ]*/
+
+    const [data, setData] = useState(()=>[]);
+    useEffect(()=>{
+        axios(`/bookmarks?user_id=${loginSession}`)
+            .then(res => {
+                setData(res.data);
+            })
+    },[])
+
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(10);
     const visibleRows = data.slice(startIndex, endIndex);
-
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+            alert('로그인을 먼저 진행해야합니다.');
+            movePage('/');
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -78,7 +103,7 @@ export default function Main_page() {
                 </div>
             </div>
             <div className="mainContainer">
-                <h1 style={{textAlign: 'center'}}>'user101'님의 즐겨찾기</h1>
+                <h1 style={{textAlign: 'center'}}>'{loginSession}'님의 즐겨찾기</h1>
                 <div class="result_table">
                     <table border="1">
                         <tbody>
@@ -86,8 +111,8 @@ export default function Main_page() {
                             <th>정류장 이름</th>
                             {visibleRows.map((row, index) => (
                                 <tr key={index}>
-                                    <td style={{ cursor: 'pointer' }}>{row.id}</td>
-                                    <td style={{ cursor: 'pointer' }}>{row.title}</td>
+                                    <td style={{ cursor: 'pointer' }}>{row.user_id}</td>
+                                    <td style={{ cursor: 'pointer' }}>{row.station_id}</td>
                                 </tr>
                             ))}
                         </tbody>

@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -41,27 +42,42 @@ export default function Main_page() {
     function goMyPage_usageHistory() {
         movePage('/mypage/usageHistory')
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
 
-    const data = [
-        { "id": 1, "title": "댓글1" },
-        { "id": 2, "title": "댓글2" },
-        { "id": 3, "title": "댓글3" },
-        { "id": 4, "title": "댓글4" },
-        { "id": 5, "title": "댓글5" }
-    ];
+    const [data, setData] = useState(()=>[]);
+    useEffect(()=>{
+        axios(`/comments/members?user_id=${loginSession}`)
+            .then(res => {
+                setData(res.data);
+            })
+    },[])
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(10);
     const visibleRows = data.slice(startIndex, endIndex);
-
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+            alert('로그인을 먼저 진행해야합니다.');
+            movePage('/');
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">

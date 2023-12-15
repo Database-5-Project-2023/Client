@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
-export default function AdminBoard() {
+export default function AdminBoard({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goAdmin() {
         movePage('/admin')
@@ -66,7 +66,15 @@ export default function AdminBoard() {
     }
 
 
-
+    function changePage(pageNum) {
+        setStartIndex((pageNum - 1) * 10);
+        if (pageNum * 10 >= data.length) {
+            setEndIndex(data.length);
+        }
+        else {
+            setEndIndex((pageNum) * 10);
+        }
+    }
     return (
         <div className="wrap">
             <div className="header_wrap">
@@ -98,22 +106,21 @@ export default function AdminBoard() {
                 </div>
             </div>
             <div className="admin_container">
-                <div className="search_container">
+                <div className="search_container" style={{marginTop:'30px'}}>
                     <a>게시판 관리</a>
-                    <input type="text" placeholder="게시판 검색" id="search_input" />
+                    <input type="text" placeholder="게시판 검색" id="search_input" style={{width : '200px'}}/>
                     <button type="button" id="search_btn">검색</button>
                 </div>
             </div>
-            <div className="admin_container">
+            <div className="admin_container" style={{paddingBottom:'20px'}}>
                 <div className="result_table">
-                    <table border="1">
+                    <table border='1'>
                         <tbody>
                             <th>번호</th>
                             <th>제목</th>
                             <th>사용자</th>
                             <th>조회수</th>
                             <th>날짜</th>
-                            <th>삭제</th>
                             {visibleRows.map((row, index) => (
                                 <tr key={index}>
                                     <td style={{ cursor: 'pointer' }}>{row.post_id}</td>
@@ -121,18 +128,19 @@ export default function AdminBoard() {
                                     <td>{row.creator_id}</td>
                                     <td>{row.hit}</td>
                                     <td>{row.created_at.split('T')[0]}</td>
-                                    <td>
-                                        <form action="/board/delete/~" method="post">
-                                            <button type="submit">삭제</button>
-                                        </form>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
             </div>
-
+            <div className="pagination">
+                            <button disabled="true">이전</button>
+                            <button onClick={() => changePage(1)}>1</button>
+                            <button onClick={() => changePage(2)}>2</button>
+                            <button onClick={() => changePage(3)}>3</button>
+                            <button >다음</button>
+                        </div>
         </div>
     );
 }

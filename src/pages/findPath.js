@@ -37,9 +37,6 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
     function goHeatMap() {
         movePage('/heatmap');
     }
-    function goFindPath() {
-        movePage('/findpath');
-    }
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
@@ -48,9 +45,6 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
         movePage('/');
         window.location.reload();
     }
-    function goBikeList(){
-        movePage('/bikelist');
-    }
     const [visibleInfo, setVisibleInfo] = useState(false);
     const [stationId, setStationId] = useState(0);
     const [stationName, setStationName] = useState(null);
@@ -58,8 +52,6 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
     const [sproutCnt, setSproutCnt] = useState(0);
     const [holderCnt, setHolderCnt] = useState(0);
     const [isLogin, setIsLogin] = useState(false);
-
-
     useEffect(() => {
         if(loginSession==null){
             setIsLogin(false);
@@ -74,6 +66,7 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
         { "Lat": 37.6195076, "Lng": 127.0579355,"id":1236, "name": "광운대건너편",  "generalCnt":12, "sproutCnt": 3},
         { "Lat": 37.619835, "Lng": 127.0629324,"id":1237, "name": "광운대후문",  "generalCnt":13, "sproutCnt": 2}
     ]*/
+
 
 
     var HOME_PATH = window.HOME_PATH || '.';
@@ -119,6 +112,7 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
     /*지도 띄우기 및 현재 위치 가져오기 */
     useEffect(() => {
 
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setMyLocation({
@@ -155,14 +149,6 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
         }
     }, [data]);
 
-    useEffect(() => {
-        console.log(bikeInfo);
-        setGeneralCnt(bikeInfo.general_bike);
-        setSproutCnt(bikeInfo.sprout_bike);
-        setStationId(bikeInfo.id);
-        setStationName(bikeInfo.station_addr2);
-        setHolderCnt(bikeInfo.remainder_holder)
-    }, [bikeInfo]);
 
     /*현위치 marker로 표시하기 */
 
@@ -192,24 +178,90 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
         }
     };
 
+    useEffect(() => {
+        console.log(bikeInfo);
+        setGeneralCnt(bikeInfo.general_bike);
+        setSproutCnt(bikeInfo.sprout_bike);
+        setStationId(bikeInfo.id);
+        setStationName(bikeInfo.station_addr2);
+        setHolderCnt(bikeInfo.remainder_holder)
+    }, [bikeInfo]);
+
     const closeInfo = () => {
         setVisibleInfo(false)
     };
+    
+    const [startId, setStartId] = useState(0);
+    const [startLat, setStartLat] = useState(0);
+    const [startLog, setStartLog] = useState(0);
+    const [destId, setDestId] = useState(0);
+    const [destLat, setDestLat] = useState(0);
+    const [destLog, setDestLog] = useState(0);
+    const [pathValue, setPathValue] = useState([]);
 
-    const [isClick,setIsClick]=useState(false);
-    const handleClick = () =>{
-        setIsClick(!isClick);
-    }
+    const clientID = 'uemes188wq';
+    const clientSecret = 'yvdxX29vf6rhuJ2vrJ7yYQuilMI1HwQIAJWGNUjl'
 
-    const [showRental, setShowRental] = useState(false);
-    const rentalHandler = () =>{
-      
-    }
+    const startLocBtn = (id) => {
+        setStartId(id)
+    };
+    const destLocBtn = (id) => {
+        setDestId(id)
+    };
 
-    const [showReturn, setShowReturn]=useState(false);
-    const returnHandler = () =>{
-        setShowReturn(true);
-    }
+    useEffect(()=>{
+        const foundItem = data.find(item=> item.station_id === startId);
+        if(foundItem!=null){
+            setStartLat(foundItem.station_latitude);
+            setStartLog(foundItem.station_longitude);
+        }
+    }, [startId]);
+    useEffect(()=>{
+        const foundItem = data.find(item=> item.station_id === destId)
+        if(foundItem!=null){
+            setDestLat(foundItem.station_latitude);
+            setDestLog(foundItem.station_longitude);
+        }
+    }, [destId]);
+
+    const url = `https://cors-anywhere.herokuapp.com/https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start=${startLog},${startLat}&goal=${destLog},${destLat}&option=traavoidcaronly`
+
+    const getPath = async () =>{
+
+        try{
+            const response = await axios.get(url,{
+                headers:{
+                    'X-NCP-APIGW-API-KEY-ID': clientID,
+                    'X-NCP-APIGW-API-KEY': clientSecret
+                }
+            });
+            console.log(response.data)
+            if (response.data.route && response.data.route.traavoidcaronly && response.data.route.traavoidcaronly.length > 0) {
+                setPathValue(response.data.route.traavoidcaronly[0].path);
+              }
+        }
+        catch(error){
+            console.error(error);
+        }
+    };
+
+    useEffect(()=>{
+        for(let i =0;i<pathValue.length;i++){
+            Allpaths.push(new naver.maps.LatLng(pathValue[i][1],pathValue[i][0]));
+        }
+    },[pathValue])
+
+    var Allpaths = [];
+    
+    useEffect(()=>{
+        console.log(Allpaths);
+        var polyLine = new naver.maps.Polyline({
+            map: mapRef.current,
+            path: Allpaths,
+            strokeWeight: 5,
+            strokeOpacity: 0.9
+        })
+    },[Allpaths]);
 
     return (
         <div className="wrap">
@@ -248,6 +300,17 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
                 </div>
             </div>
             <div className="mainContainer">
+                <div style={{backgroundColor:'rgb(48 226 145)', width:'20%',height:'40px',lineHeight:'40px',color:'white', marginLeft:'40%',borderRadius:'5px'}}>
+                    <a>출발지 ID: </a>
+                    <a>{startId}</a>
+                </div>
+                <div style={{backgroundColor:'#3d5567', width:'20%',height:'40px',lineHeight:'40px',color:'white', marginLeft:'40%',borderRadius:'5px'}}>
+                    <a>도착지 ID:</a>
+                    <a>{destId}</a>
+                </div>
+                <div>
+                    <button onClick={getPath} style={{width:'100px', height:'30px', margin:'10px'}}>길찾기</button>
+                </div>
                 <div className="mapContainer">
                     <div>
                         <div id="map" style={{ width: "900px", height: "700px" }}>
@@ -257,37 +320,17 @@ export default function Main_page({loginSession, setLoginSession, adminSession, 
                                     <div className="loc_info_header">
                                         <a>{stationId}.</a>
                                         <a>{stationName}</a>
-                                        <img src={isClick? "/images/yellowStar.png":"/images/star.png"} onClick={handleClick} className="bookmarkStar" ></img>
                                         <img onClick={closeInfo} src="/images/close_02.png" className="closeBtn"></img>
                                     </div>
-                                    <div className="loc_info_body">
-                                        <div className="bikeCntInfo">
-                                            <a>일반 따릉이</a> 
-                                            <a>{generalCnt}</a>
-                                        </div>
-                                        <div className="bikeCntInfo">
-                                            <a>새싹 따릉이</a> 
-                                            <a>{sproutCnt}</a>
-                                        </div>
-                                        <div className="bikeCntInfo">
-                                            <a>남은 거치대 수</a> 
-                                            <a>{holderCnt}</a>
-                                        </div>
-                                    </div>
                                     <div className="loc_info_bottom">
-                                        <button onClick={rentalHandler}>대여하기</button>
-                                        <button>반납하기</button>
+                                        <button onClick={()=>startLocBtn(stationId)}>출발지로</button>
+                                        <button onClick={()=>destLocBtn(stationId)}>도착지로</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="heatDotMap">
-                <button onClick={goDotMap}>점지도 보러 가기</button>
-                <button onClick={goHeatMap}>열지도 보러 가기</button>
-                <button onClick={goFindPath}>길 찾기</button>
             </div>
         </div>
     );

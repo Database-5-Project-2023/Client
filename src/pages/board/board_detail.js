@@ -1,9 +1,10 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../styles.css";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -29,6 +30,11 @@ export default function Main_page() {
     function goMyPage() {
         movePage('/mypage/modifyInfo');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
 
     function goBoardModify() {
         movePage('/board/modify');
@@ -37,38 +43,66 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
-    const data = [
-        { "id": 1, "title": "제목" },
-        { "id": 2, "title": "제목" },
-        { "id": 3, "title": "제목" },
-        { "id": 4, "title": "제목" },
-        { "id": 5, "title": "제목" },
-        { "id": 6, "title": "제목" },
-        { "id": 7, "title": "제목" },
-        { "id": 8, "title": "제목" },
-        { "id": 9, "title": "제목" },
-        { "id": 10, "title": "제목" },
-        { "id": 11, "title": "제목" },
-        { "id": 12, "title": "제목" },
-        { "id": 13, "title": "제목" },
-        { "id": 14, "title": "제목" },
-        { "id": 15, "title": "제목" },
-        { "id": 16, "title": "제목" },
-        { "id": 17, "title": "제목" },
-        { "id": 18, "title": "제목" },
-        { "id": 19, "title": "제목" }
-    ]
 
+    const params = useParams();
+
+    const id = params.id;
+    
+
+    const [visible, setVisible] = useState(false);
+    const [data, setData] = useState([]);
+    const [comment, setComment] = useState([]);
+
+    useEffect(()=>{
+        axios(`/posts/view?post_id=${id}`)
+            .then(res => {
+                setData(res.data);
+                setVisible(true);
+            })
+        axios(`/comments?post_id=${id}`)
+            .then(res=>{
+                setComment(res.data);
+            })
+    },[id])
+
+    console.log(data)
+    console.log(comment)
+    
+
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+        }else{
+            setIsLogin(true);
+        }
+
+
+    },[]);
+
+    const [writeComment, setWriteComment] = useState('');
+
+    const searchHandler =async() =>{
+        try{
+            const response = await axios(`/comments?post_id=${loginSession}`)
+            .then(res=>{
+                setData(res.data);
+            })
+        }catch(error){
+
+        }
+    }
 
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -99,13 +133,13 @@ export default function Main_page() {
                 <div className="detail_table">
 
                     <div id="postDetail">
-                        <h2 id="postTitle"></h2>
+                        <h2 id="postTitle">{visible? data.post.title: "0"}</h2>
                         <div id="postInfo">
-                            작성자: <span id="postAuthor"></span>
-                            작성일: <span id="postDate"></span>
-                            조회수: <span id="postViews"></span>
+                            작성자: <span id="postAuthor">{visible? data.post.creator_id:"1"} </span>
+                            작성일: <span id="postDate">{visible? data.post.created_at.split('T')[0]: "2"} </span>
+                            조회수: <span id="postViews">{visible? data.post.hit : "3"}</span>
                         </div>
-                        <p id="postContent"></p>
+                        <p id="postContent" style={{border:'1px solid',height: 300}}>{visible? data.post.content: "4"}</p>
                     </div>
 
                     <div id="modifyDeleteButtons">
@@ -121,7 +155,7 @@ export default function Main_page() {
                         <div id="comment_write">
                             <h3>댓글 작성</h3>
                             <div id="comment_write_form">
-                                <textarea id="commentContent" rows="3" cols="50"></textarea>
+                                <textarea id="commentContent" rows="3" cols="50"onChange={e => setWriteComment(e.target.value)}></textarea>
                                 <button type="button">댓글 작성</button>
                             </div>
                         </div>

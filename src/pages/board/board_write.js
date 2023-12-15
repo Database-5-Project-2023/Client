@@ -1,9 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../styles.css";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({ loginSession, setLoginSession, adminSession, setAdminSession }) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -32,56 +33,70 @@ export default function Main_page() {
     function goBoardDetail(id) {
         movePage('/board/detail/' + id);
     }
+    function logout() {
+        localStorage.setItem("loginSession", null);
+        movePage('/');
+        window.location.reload();
+    }
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
-    const data = [
-        { "id": 1, "title": "제목" },
-        { "id": 2, "title": "제목" },
-        { "id": 3, "title": "제목" },
-        { "id": 4, "title": "제목" },
-        { "id": 5, "title": "제목" },
-        { "id": 6, "title": "제목" },
-        { "id": 7, "title": "제목" },
-        { "id": 8, "title": "제목" },
-        { "id": 9, "title": "제목" },
-        { "id": 10, "title": "제목" },
-        { "id": 11, "title": "제목" },
-        { "id": 12, "title": "제목" },
-        { "id": 13, "title": "제목" },
-        { "id": 14, "title": "제목" },
-        { "id": 15, "title": "제목" },
-        { "id": 16, "title": "제목" },
-        { "id": 17, "title": "제목" },
-        { "id": 18, "title": "제목" },
-        { "id": 19, "title": "제목" }
-    ]
-    const [startIndex, setStartIndex] = useState(0);
-    const [endIndex, setEndIndex] = useState(10);
+    const [formData, setFormData] = useState({creator_id:loginSession});
 
-    function changePage(pageNum) {
-        setStartIndex((pageNum - 1) * 10);
-        if (pageNum * 10 >= data.length) {
-            setEndIndex(data.length);
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setFormData(prevState => ({...prevState, [name]: value}));
+        console.log(formData);
+    };
+
+    const [file, setFile] = useState(null);
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+        console.log(file);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        
+        const NewForm = new FormData();
+        console.log(file);
+        NewForm.append('image', file);
+        console.log(formData);
+        NewForm.append('post',JSON.stringify(formData));
+        
+        try {
+            const response = await axios.post('/posts/write', NewForm,{
+                headers:{
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            alert('게시글이 정상적으로 추가되었습니다.');
+        } catch (error) {
+            alert(`${error.message}`)
+            console.error('Error:', error);
         }
-        else {
-            setEndIndex((pageNum) * 10);
+        //window.close();
+    };
+
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if (loginSession == null) {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true);
         }
-    }
-
-
-
-    const visibleRows = data.slice(startIndex, endIndex);
-
+    }, []);
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                        {isLogin && (<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin && (<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession && (<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin && (<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin && (<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -112,25 +127,24 @@ export default function Main_page() {
                 <h2>게시글 작성</h2>
 
                 <div className="result_table">
-                    <form id="dashboard_write_form">
+                    <form id="dashboard_write_form" onSubmit={handleSubmit}>
                         <table id="dashboard_write_table" border="1">
                             <tr>
                                 <td>제목</td>
-                                <td><input type="text" id="title" name="title" required /></td>
+                                <td><input type="text" id="title" name="title" onChange={handleChange} required /></td>
                             </tr>
                             <tr>
                                 <td>작성글</td>
                                 <td>
-                                    <textarea rows="10" cols="50" name="content"></textarea>
+                                    <textarea rows="10" cols="50" name="content" onChange={handleChange}></textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td>이미지 파일 첨부</td>
-                                <td><input type="file" name="image" accept="image/*" /></td>
+                                <td><input type="file" name="image" accept="image/*" onChange={handleFileChange}/></td>
                             </tr>
                         </table>
-                        <button type="button">게시글 작성</button>
-                        <button type="button">작성 취소</button>
+                        <button type="submit">게시글 작성</button>
                     </form>
                 </div>
             </div>

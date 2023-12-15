@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Main_page() {
+export default function Main_page({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -40,16 +42,49 @@ export default function Main_page() {
     function goAdmin(url) {
         window.open(url, '_blank', 'noopener, noreferrer');
     }
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
+    }
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        if(loginSession==null){
+            setIsLogin(false);
+            alert('로그인을 먼저 진행해야합니다.');
+            movePage('/');
+        }else{
+            setIsLogin(true);
+        }
+    },[]);
+    
+    const handleSubmit = async(event) =>{
+        event.preventDefault();
+        
+        try{
+            const response = await axios.delete(`/members/delete?id=${loginSession}`);
+            alert("회원정보가 탈퇴되었습니다.");
+            setLoginSession(null);
+            movePage('/')
+        }catch(error){
+            alert(`${error.message}`)
+            console.error('Error:',error);
+        }
+        //window.close();
+    };
+
+
 
     return (
         <div className="wrap">
             <div className="header_wrap">
                 <div className="top">
                     <div className="joinlogin">
-                        <a className="mypage" onClick={goMyPage}>마이페이지</a>
-                        <a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>
-                        <a className="join" onClick={goJoin}>회원가입</a>
-                        <a className="login" onClick={goLogin}>로그인</a>
+                    {isLogin&&(<a className="mypage" onClick={goMyPage}>마이페이지</a>)}
+                        {isLogin&&(<a className="mypage" onClick={logout}>로그아웃</a>)}
+                        {adminSession&&(<a className="admin" onClick={() => goAdmin('/admin')}>관리자 페이지</a>)}
+                        {!isLogin&&(<a className="join" onClick={goJoin}>회원가입</a>)}
+                        {!isLogin&&(<a className="login" onClick={goLogin}>로그인</a>)}
                     </div>
                 </div>
                 <div className="header">
@@ -113,7 +148,9 @@ export default function Main_page() {
                                 </li>
                             </ul>
                         </div>
-                        <button className="memberDeleteBtn" type="button" >회원 탈퇴</button>
+                        <form onSubmit={handleSubmit}>
+                            <button className="memberDeleteBtn" type="submit" >회원 탈퇴</button>
+                        </form>
                     </div>
                 </div>
             </div>

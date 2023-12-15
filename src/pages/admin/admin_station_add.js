@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 
-export default function AdminStationAdd() {
+export default function AdminStationAdd({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
 
     const [formData, setFormData] = useState({});
@@ -19,12 +19,12 @@ export default function AdminStationAdd() {
         event.preventDefault();
         try{
             const response = await axios.post('/admin/station/add', formData);
-            alert(`${response.data}`);
+            alert('대여소가 정상적으로 추가되었습니다.');
         }catch(error){
             alert(`${error.message}`)
             console.error('Error:',error);
         }
-        window.close();
+        //window.close();
     };
     
 

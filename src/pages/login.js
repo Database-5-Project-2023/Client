@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
-export default function Login() {
+export default function Login({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goMain() {
         movePage('/');
@@ -26,16 +27,47 @@ export default function Login() {
     function goJoin() {
         movePage('/join');
     }
-
-    const [id_value, setId] = useState('');
-    const [pw_value, setPw] = useState('');
-
-    const handlesubmit = (e) => {
-        //onLogin();
+    function logout(){
+        localStorage.setItem("loginSession",null);
+        movePage('/');
+        window.location.reload();
     }
 
+    const [isLogin, setisLogin] = useState(false);
+    useEffect(()=>{
+        if(isLogin==true){
+            setLoginSession(id);
+            movePage('/');
+        }
+        
+    },[isLogin])
+    useEffect(()=>{
+        localStorage.setItem("loginSession",JSON.stringify(loginSession));
+        
+    },[loginSession]);
+    
 
-    return (
+    const [id,setId] =useState('');
+    const [pwd,setPwd] =useState('');
+    
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post(`/members/login?id=${id}&pwd=${pwd}`);
+            console.log(response.data)
+            if(response.data!=null){
+                setisLogin(true);
+            }
+        } catch (error) {
+            alert(`${error.message}`)
+            console.error('Error:', error);
+        }
+    };
+
+    
+
+    return (                
         <div className="wrap">
             <div className="header_wrap">
                 <div className="header">
@@ -47,32 +79,13 @@ export default function Login() {
                 </div>
             </div>
             <div className="mainContainer">
-                <h1>로그인</h1>
-                <form name="signupForm" method="post" onSubmit={handlesubmit}>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" value={id} name="id" onChange= {(e)=>setId(e.target.value)} placeholder="ID"></input>
 
-                    <input
-                        type="text"
-                        id="id"
-                        name="id"
-                        placeholder="아이디"
-                        value={id_value}
-                        onChange={(e) => setId(e.target.value)}
-                        required>
-                    </input>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="비밀번호"
-                        value={pw_value}
-                        onChange={(e) => setPw(e.target.value)}
-                        required>
-                    </input>
+                    <input type="password" value={pwd} name="pwd" onChange={(e) => setPwd(e.target.value)} placeholder="비밀번호"></input>
 
                     <button type="submit">로그인</button>
                 </form>
-                <a id="joinBtn" onClick={goJoin}>회원가입</a>
             </div>
         </div>
     );

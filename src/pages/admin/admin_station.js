@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 
-export default function AdminStation() {
+export default function AdminStation({loginSession, setLoginSession, adminSession, setAdminSession}) {
     const movePage = useNavigate();
     function goAdmin() {
         movePage('/admin')
@@ -27,6 +27,7 @@ export default function AdminStation() {
     }
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    
 
     const openPopup = () => {
         setIsPopupOpen(true);
@@ -73,6 +74,33 @@ export default function AdminStation() {
     const [endIndex, setEndIndex] = useState(10);
     const visibleRows = data.slice(startIndex, endIndex);
 
+    const [searchValue, setsearchValue] = useState('');
+    console.log(searchValue);
+
+
+    const searchHandler =async() =>{
+        try{
+            const response = await axios(`/station/search?station_address=${searchValue}`)
+            .then(res=>{
+                setData(res.data);
+            })
+        }catch(error){
+
+        }
+    }
+    
+    function changePage(pageNum) {
+        setStartIndex((pageNum - 1) * 10);
+        if (pageNum * 10 >= data.length) {
+            setEndIndex(data.length);
+        }
+        else {
+            setEndIndex((pageNum) * 10);
+        }
+    }
+    const clickHandler = () =>{
+        alert("대여소가 폐쇄되었습니다.");
+    }
 
     return (
         <div className="wrap">
@@ -105,14 +133,14 @@ export default function AdminStation() {
                 </div>
             </div>
             <div className="admin_container">
-                <div className="search_container">
+                <div className="search_container" style={{marginTop:'30px'}}>
                     <a>따릉이 대여소 개설 및 폐쇄</a>
-                    <input type="text" placeholder="따릉이 대여소 검색" id="search_input" />
-                    <button type="button" id="search_btn">검색</button>
+                    <input type="text" placeholder="따릉이 대여소 검색" id="search_input" onChange={e => setsearchValue(e.target.value)} style={{width : '200px'}}/>
+                    <button type="button" id="search_btn" onClick={searchHandler}>검색</button>
                     <button type="button" onClick={openStationPopup} id="add_btn">대여소 개설</button>
                 </div>
             </div>
-            <div className="admin_container">
+            <div className="admin_container" style={{paddingBottom:'20px'}}>
                 <div className="result_table">
                     <table border="1">
                         <tbody>
@@ -136,9 +164,8 @@ export default function AdminStation() {
                                     <td>{row.holder_num}</td>
                                     <td>{row.install_date.split('T')[0]}</td>
                                     <td>
-                                        <form action="/board/delete/~" method="post">
-                                            <button type="submit">폐쇄</button>
-                                        </form>
+                                        <button onClick={clickHandler}>폐쇄</button>
+                                        
                                     </td>
                                 </tr>
                             ))}
@@ -146,7 +173,13 @@ export default function AdminStation() {
                     </table>
                 </div>
             </div>
-
+            <div className="pagination">
+                            <button disabled="true">이전</button>
+                            <button onClick={() => changePage(1)}>1</button>
+                            <button onClick={() => changePage(2)}>2</button>
+                            <button onClick={() => changePage(3)}>3</button>
+                            <button >다음</button>
+                        </div>
         </div>
     );
 }
