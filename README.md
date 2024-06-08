@@ -1,6 +1,7 @@
 # 데이터베이스 및 데이터 시각화 프로젝트
 
-<img src="https://github.com/JungSungYeob/DB_react/assets/92677088/7f440014-5687-454f-ba79-20cd60783f12" width=100%/>
+<img src="https://github.com/Database-5-Project-2023/Client/assets/92677088/1359e62f-1803-4878-bc2e-f2863e7db4f3"/>
+
 
 ## 1.	웹 애플리케이션 소개
  본 프로젝트는 데이터베이스 관리 시스템(DBMS)를 사용하는 웹 애플리케이션을 개발하는 프로젝트로, "따릉이 플랫폼"을 주제로 한다.<br/>
@@ -18,26 +19,30 @@
 **데이터시각화**
 **대여소 별 일일 대여량 시각화**
 <br/>
-<img width="298" alt="image" src="https://github.com/JungSungYeob/DB_react/assets/92677088/85bf4efd-8cfe-47d0-9d91-16433d6fddd4">
+<img width="298" alt="image" src="https://github.com/Database-5-Project-2023/Client/assets/92677088/1d1252ea-9f72-4837-b186-61335e35d1f7">
 
-<img width="303" alt="image" src="https://github.com/JungSungYeob/DB_react/assets/92677088/f7028207-3e6c-454f-a4c4-c5a55f262314">
+
+<img width="303" alt="image" src="https://github.com/Database-5-Project-2023/Client/assets/92677088/e4fd92ff-a372-46b2-9b6e-550692c30f48">
+
 
 **경로 찾기**
 <br/>
-<img width="345" alt="image" src="https://github.com/JungSungYeob/DB_react/assets/92677088/41c6ede3-ba21-4295-830b-b207263ec5ab">
+<img width="345" alt="image" src="https://github.com/Database-5-Project-2023/Client/assets/92677088/ec5308ab-4b81-4dca-819f-1659454d7d41">
+
 
 **실시간 날씨 조회**
 <br/>
-<img width="284" alt="image" src="https://github.com/JungSungYeob/DB_react/assets/92677088/8695b05f-fb29-4c23-b024-0b24e9a78d52">
+<img width="284" alt="image" src="https://github.com/Database-5-Project-2023/Client/assets/92677088/45fdf87a-c460-4a1a-82d2-530fcad8d8d8">
+
 
 **관리자 대시보드**
 <br/>
-<img width="348" alt="image" src="https://github.com/JungSungYeob/DB_react/assets/92677088/1572c007-bfb6-469f-a9bf-50e3bb19b5f3">
+<img width="348" alt="image" src="https://github.com/Database-5-Project-2023/Client/assets/92677088/02534fe8-3291-4bdc-99f4-074d1809684a">
+
 
 ## 팀원 소개
->  **FE 1명 & BE 1명 & 인공지능모델 3명**
+>  **FE 2명 & BE 2명**
 > 
-> 모델 개발에 필요한 데이터 라벨링은 공동 진행
 
 
 <table>
